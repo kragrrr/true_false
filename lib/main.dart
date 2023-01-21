@@ -19,6 +19,7 @@ class MyApp extends StatelessWidget {
           title: const Text('True/False'),
           backgroundColor: const Color(0xFF0A0E21),
         ),
+        // make a 3 second timer before starting the quiz
         body: Container(
           child: const QuizStateFull(),
         ),

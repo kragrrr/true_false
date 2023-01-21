@@ -11,7 +11,7 @@ class QuizLogic {
   ];
 
   void nextQuestion() {
-    if (questionNumber <= questionBank.length + 1) {
+    if (questionNumber < questionBank.length + 1) {
       questionNumber++;
     }
   }
@@ -29,7 +29,7 @@ class QuizLogic {
   }
 
   bool isFinished() {
-    if (questionNumber == questionBank.length - 1) {
+    if (questionNumber == questionBank.length) {
       reset();
       return true;
     } else {

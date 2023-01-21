@@ -13,20 +13,38 @@ class QuizStateFull extends StatefulWidget {
 
 class _QuizStateFullState extends State<QuizStateFull> {
   List<Icon> score = [];
+  int correct = 0;
 
   @override
   void checkAnswer(bool userPickedAnswer) {
-    bool correctAnswer = quizLogic.getAnswer();
+    if (!quizLogic.isFinished()) {
+      bool correctAnswer = quizLogic.getAnswer();
+      if (userPickedAnswer == correctAnswer) {
+        correct++;
+        score.add(const Icon(Icons.check, color: Colors.green));
+      } else {
+        score.add(const Icon(Icons.close, color: Colors.red));
+      }
+      quizLogic.nextQuestion();
+    }
     if (quizLogic.isFinished()) {
       score = [];
       quizLogic.reset();
       Alert(
         context: context,
         title: "Finished!",
+        desc: "Score : $correct/4",
         type: AlertType.success,
         buttons: [
           DialogButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () {
+              Navigator.pop(context);
+              quizLogic.reset();
+              setState(() {
+                score = [];
+                correct = 0;
+              });
+            },
             child: const Text(
               "Restart",
               style: const TextStyle(color: Colors.white, fontSize: 20),
@@ -35,14 +53,8 @@ class _QuizStateFullState extends State<QuizStateFull> {
           )
         ],
       ).show();
+      correct = 0;
     }
-
-    if (userPickedAnswer == correctAnswer) {
-      score.add(const Icon(Icons.check, color: Colors.green));
-    } else {
-      score.add(const Icon(Icons.close, color: Colors.red));
-    }
-    quizLogic.nextQuestion();
     setState(() {});
   }
 
